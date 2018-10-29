@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Simple
 {
@@ -6,175 +7,26 @@ namespace Simple
     {
         static void Main(string[] args)
         {
+            Dictionary<string, Expression> env = new Dictionary<string, Expression>()
+            {
+                ["x"] = new Number(3),
+                ["y"] = new Number(4),
+            };
             Expression expression = new Add(new Multiply(new Number(1), new Number(2)), new Multiply(new Number(3), new Number(4)));
-            new Machine(expression).Run();
+            new Machine(expression, env).Run();
             Expression expression2 = new LessThan(new Number(5), new Add(new Number(2), new Number(2)));
-            new Machine(expression2).Run();
+            new Machine(expression2, env).Run();
+            Expression expression3 = new Add(new Variable("x"), new Variable("y"));
+            new Machine(expression3, env).Run();
+            Expression assignment = new Assign("x", new Add(new Variable("x"), new Number(1)));
+            new Machine(assignment, new Dictionary<string, Expression>() { ["x"] = new Number(2) }).Run();
+            Expression ifExpression = new If(new Variable("x"), new Assign("y", new Number(1)), new DoNothing());
+            new Machine(ifExpression, new Dictionary<string, Expression>
+            {
+                ["x"] = new Boolean(false)
+            }).Run();
+
             Console.Read();
-        }
-    }
-    public abstract class Expression
-    {
-        public object Value { get; set; }
-
-        public abstract bool Reducible();
-
-        public virtual Expression Reduce()
-        {
-            return this;
-        }
-    }
-
-    public class SimpleObject : Expression
-    {
-        public SimpleObject(object value)
-        {
-            this.Value = value;
-        }
-
-        public override bool Reducible()
-        {
-            return false;
-        }
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
-    }
-
-    public class Number : SimpleObject
-    {
-        public Number(object value) : base(value) {}
-    }
-
-    public class Boolean : SimpleObject
-    {
-        public Boolean(object value) : base(value) {}
-    }
-
-    public class LessThan : TwoFactorOperator
-    {
-        public LessThan(Expression left, Expression right) : base(left, right)
-        {
-        }
-
-        public override string ToString()
-        {
-            return $"{Left} < {Right}";
-        }
-
-        public override Expression Reduce()
-        {
-            if (Left.Reducible())
-            {
-                return new LessThan(Left.Reduce(), Right);
-            }
-            else if (Right.Reducible())
-            {
-               return new LessThan(Left, Right.Reduce());
-            }
-            else
-            {
-                return new Boolean(double.Parse(Left.Value.ToString()) < double.Parse(Right.Value.ToString()));
-            }
-        }
-    }
-
-    public class TwoFactorOperator : Expression
-    { 
-        public Expression Left { get; set; }
-
-        public Expression Right { get; set; }
-
-        public TwoFactorOperator(Expression left, Expression right)
-        {
-            this.Left = left;
-            this.Right = right;
-        }
-
-        public override bool Reducible()
-        {
-            return true;
-        }
-    }
-
-    public class Add : TwoFactorOperator
-    {
-        public Add(Expression left, Expression right) : base(left, right)
-        {
-        }
-
-        public override string ToString()
-        {
-            return $"{Left} + {Right}";
-        }
-
-        public override Expression Reduce()
-        {
-            if (Left.Reducible())
-            {
-                return new Add(Left.Reduce(), Right);
-            }
-            else if(Right.Reducible())
-            {
-                return new Add(Left, Right.Reduce());
-            }
-            else
-            {
-                return new Number(double.Parse(Left.Value.ToString()) + double.Parse(Right.Value.ToString()));
-            }
-        }
-    }
-
-    public class Multiply : TwoFactorOperator
-    {
-        public Multiply(Expression left, Expression right) : base(left, right) { }
-
-        public override string ToString()
-        {
-            return $"{Left} * {Right}";
-        }
-        public override Expression Reduce()
-        {
-            if (Left.Reducible())
-            {
-                return new Add(Left.Reduce(), Right);
-            }
-            else if(Right.Reducible())
-            {
-                return new Add(Left, Right.Reduce());
-            }
-            else
-            {
-                return new Number(double.Parse(Left.Value.ToString()) * double.Parse(Right.Value.ToString()));
-            }
-        }
-    }
-
-    public class Machine
-    {
-        public Machine(Expression expression)
-        {
-            Step(expression);
-        }
-
-        private Expression expression;
-
-        public void Step(Expression expression)
-        {
-            this.expression = expression;
-            Console.WriteLine(expression);
-        }
-
-        public Expression Run()
-        {
-            while (expression.Reducible())
-            {
-               Step(expression.Reduce()); 
-            }
-
-            return expression;
         }
     }
 }

@@ -43,11 +43,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Add.cs" />
+    <Compile Include="Assign.cs" />
+    <Compile Include="Boolean.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="DoNothing.cs" />
+    <Compile Include="Expression.cs" />
+    <Compile Include="If.cs" />
+    <Compile Include="LessThan.cs" />
+    <Compile Include="Machine.cs" />
+    <Compile Include="Multiply.cs" />
+    <Compile Include="Number.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TwoFactorOperator.cs" />
+    <Compile Include="Variable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SimpleObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
