@@ -14,11 +14,11 @@ namespace Simple
         {
             if (Left.Reducible())
             {
-                return new Context(new Add(Left.Reduce(environment).Expression, Right), environment);
+                return new Context(new Multiply(Left.Reduce(environment).Expression, Right), environment);
             }
             else if (Right.Reducible())
             {
-                return new Context(new Add(Left, Right.Reduce(environment).Expression), environment);
+                return new Context(new Multiply(Left, Right.Reduce(environment).Expression), environment);
             }
             else
             {

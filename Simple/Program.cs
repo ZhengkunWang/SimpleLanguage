@@ -25,7 +25,13 @@ namespace Simple
             {
                 ["x"] = new Boolean(false)
             }).Run();
-
+            Expression sequencExpression = new Sequence(new Assign("x", new Add(new Number(1), new Number(1))), new Assign("y", new Add(new Variable("x"), new Number(3))));
+            new Machine(sequencExpression, new Dictionary<string, Expression>()).Run();
+            Expression whileExpression = new While(new LessThan(new Variable("x"), new Number(5)), new Assign("x", new Multiply(new Variable("x"), new Number(3))));
+            new Machine(whileExpression, new Dictionary<string, Expression>()
+            {
+                ["x"] = new Number(1)
+            }).Run();
             Console.Read();
         }
     }
