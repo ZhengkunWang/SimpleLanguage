@@ -25,5 +25,10 @@ namespace Simple
         {
             return new Context(environment[Name], environment);
         }
+
+        public override Expression Evaluate(Dictionary<string, Expression> env)
+        {
+            return env[Name];
+        }
     }
 }

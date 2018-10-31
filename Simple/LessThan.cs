@@ -28,5 +28,10 @@ namespace Simple
                 return new Context(new Boolean(double.Parse(Left.Value.ToString()) < double.Parse(Right.Value.ToString())), environment);
             }
         }
+
+        public override Expression Evaluate(Dictionary<string, Expression> env)
+        {
+            return new Boolean(double.Parse(Left.Evaluate(env).Value.ToString()) < double.Parse(Right.Evaluate(env).Value.ToString()));
+        }
     }
 }

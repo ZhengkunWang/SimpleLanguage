@@ -25,5 +25,10 @@ namespace Simple
                 return new Context(new Number(double.Parse(Left.Value.ToString()) * double.Parse(Right.Value.ToString())), environment);
             }
         }
+
+        public override Expression Evaluate(Dictionary<string, Expression> env)
+        {
+            return new Number(double.Parse(Left.Evaluate(env).Value.ToString()) * double.Parse(Right.Evaluate(env).Value.ToString()));
+        }
     }
 }

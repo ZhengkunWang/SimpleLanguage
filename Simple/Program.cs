@@ -32,6 +32,9 @@ namespace Simple
             {
                 ["x"] = new Number(1)
             }).Run();
+            Console.WriteLine(new Number(23).Evaluate(new Dictionary<string, Expression>()).ToString());
+            Console.WriteLine(new Variable("x").Evaluate(new Dictionary<string, Expression>() { ["x"]=new Number(23)}).ToString());
+            Console.WriteLine(new LessThan(new Add(new Variable("x"), new Number(2)), new Variable("y")).Evaluate(new Dictionary<string, Expression>() { ["x"]=new Number(2), ["y"]=new Number(5)}).ToString());
             Console.Read();
         }
     }
